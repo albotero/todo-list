@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body>
+    <main class="content">
+      <h1 class="title">ToDo List</h1>
+      <hr class="title-hr" />
+      <div class="container">
+        <p class="new-title">Nueva tarea</p>
+        <input type="text" name="new-task" id="new-task" />
+        <button id="add-task-button" class="new-task-button">Agregar</button>
+        <p class="task-count">Total: <span class="value">0</span></p>
+        <p class="finished-count">Realizadas: <span class="value">0</span></p>
+        <div class="task-list">
+          <div>
+            <h4>ID</h4>
+            <h4>Tarea</h4>
+          </div>
+          <!-- <div class="id-1">
+            <p>1</p>
+            <p>Task</p>
+            <i class="check fa-regular fa-thumbs-up"></i>
+            <i class="del fas fa-trash"></i>
+          </div> -->
+        </div>
+      </div>
+    </main>
+    <script src="https://kit.fontawesome.com/49e51bd767.js" crossorigin="anonymous"></script>
+  </body>
+</html>

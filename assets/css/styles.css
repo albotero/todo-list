@@ -1,0 +1,126 @@
+body {
+  background-color: #848484;
+  display: flex;
+  justify-content: center;
+  font-family: "Inter", "sans-serif";
+}
+
+main.content {
+  background-color: #cdcdcd;
+  width: 40rem;
+  margin-top: 15%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0.1rem 0.1rem 0.5rem #464646;
+}
+
+h1,
+h4 {
+  font-family: "Roboto", "sans-serif";
+}
+
+.title,
+.container p {
+  margin: 0;
+}
+
+.title-hr {
+  width: 100%;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr min-content;
+  grid-template-rows: repeat(4, min-content);
+  grid-template-areas:
+    "new-title . ."
+    "new-task new-task new-button"
+    ". tasks tasks"
+    "summary-total tasks tasks"
+    "summary-done tasks tasks"
+    ". tasks tasks";
+  gap: 0.2rem 0.5rem;
+}
+
+.new-title {
+  grid-area: new-title;
+  margin: 0;
+}
+
+#new-task,
+.new-task-button {
+  font-size: 1.1rem;
+  line-height: 2rem;
+  border-radius: 0.6rem;
+}
+
+#new-task {
+  grid-area: new-task;
+  padding: 0.15rem 0.75rem;
+  border: 0.13rem solid #999;
+}
+
+.new-task-button {
+  grid-area: new-button;
+  padding: 0.4rem 0.8rem;
+  background-color: rgb(0, 130, 0);
+  border: 0.13rem solid #6b9774;
+  color: #d3ebd8;
+}
+
+.task-count {
+  grid-area: summary-total;
+}
+
+.finished-count {
+  grid-area: summary-done;
+}
+
+span.value {
+  font-weight: bold;
+}
+
+.task-list {
+  grid-area: tasks;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.task-list h4 {
+  margin: 1.3rem 0 0.3rem;
+}
+
+.task-list > div {
+  display: grid;
+  grid-template-columns: min-content 1fr repeat(2, min-content);
+  grid-template-rows: min-content;
+  gap: 0 0.6rem;
+  padding: 0.1rem 0.6rem;
+  align-items: center;
+}
+
+.task-list > div:not(:first-child):hover {
+  background-color: #e3cda8;
+}
+
+.task-list i {
+  cursor: pointer;
+}
+
+.check {
+  color: rgb(2, 126, 2);
+}
+
+.del {
+  color: rgb(183, 6, 6);
+}
+
+.finished {
+  color: #464646;
+}
+
+.finished .check,
+.finished .del {
+  display: none;
+}
