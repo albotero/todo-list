@@ -66,6 +66,7 @@ h4 {
   background-color: rgb(0, 130, 0);
   border: 0.13rem solid #6b9774;
   color: #d3ebd8;
+  cursor: pointer;
 }
 
 .task-count {
@@ -93,34 +94,40 @@ span.value {
 
 .task-list > div {
   display: grid;
-  grid-template-columns: min-content 1fr repeat(2, min-content);
+  grid-template-columns: 2.2rem 1fr repeat(2, min-content);
   grid-template-rows: min-content;
   gap: 0 0.6rem;
   padding: 0.1rem 0.6rem;
   align-items: center;
+  border-radius: 0.6rem;
+}
+
+.task-list > div :first-child {
+  text-align: center;
 }
 
 .task-list > div:not(:first-child):hover {
   background-color: #e3cda8;
 }
 
-.task-list i {
+.task-list div:not(.finished) i {
   cursor: pointer;
+  filter: contrast(20%) brightness(105%);
 }
 
-.check {
+.task-list div:not(.finished) i:hover {
+  filter: none;
+}
+
+.finished {
+  color: #41594e;
+}
+
+.check,
+.finished i {
   color: rgb(2, 126, 2);
 }
 
 .del {
   color: rgb(183, 6, 6);
-}
-
-.finished {
-  color: #464646;
-}
-
-.finished .check,
-.finished .del {
-  display: none;
 }
