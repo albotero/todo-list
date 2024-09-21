@@ -20,7 +20,12 @@ const Task = {
   newId: () => tasks.reduce((acc, { id }) => (id > acc ? id : acc), 0) + 1,
   index: (taskId) => tasks.findIndex(({ id }) => id === taskId),
   add: () => {
-    tasks.push({ id: Task.newId(), task: DOM.newTask.value, finished: false })
+    const task = DOM.newTask.value
+    if (!task) {
+      alert("¡ERROR!\nDebe escribir alguna tarea para poder agregarla a la lista")
+      return
+    }
+    tasks.push({ id: Task.newId(), task, finished: false })
     DOM.newTask.value = ""
     renderTasks()
   },
@@ -32,7 +37,7 @@ const Task = {
   delete: (taskId) => {
     const { id, task } = tasks.splice(Task.index(taskId), 1)[0]
     renderTasks()
-    alert(`Se borró la tarea ${id}:\n > ${task}`)
+    alert(`Se borró la tarea #${id}:\n > ${task}`)
   },
 }
 
