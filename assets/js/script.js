@@ -1,3 +1,4 @@
+// Initial data
 const tasks = [
   { id: 1, task: "Lavar la ropa", finished: false },
   { id: 2, task: "Organizar el jardín", finished: true },
@@ -5,49 +6,49 @@ const tasks = [
   { id: 4, task: "Organizar el cumpleaños de Pedro", finished: false },
 ]
 
-const newTaskInput = document.getElementById("new-task")
-const newTaskButton = document.getElementById("add-task-button")
-const taskListDiv = document.querySelector(".task-list")
-const taskCountSpan = document.querySelector(".task-count .value")
-const finishedCountSpan = document.querySelector(".finished-count .value")
-
-const getNewId = () => tasks.reduce((acc, { id }) => (id > acc ? id : acc), 0) + 1
-
-const addTask = () => {
-  tasks.push({ id: getNewId(), task: newTaskInput.value, finished: false })
-  renderTasks()
+// DOM Elements to be modified by script
+const DOM = {
+  newTask: document.getElementById("new-task"),
+  addTaskButton: document.getElementById("add-task-button"),
+  taskListDiv: document.querySelector(".task-list"),
+  taskCountSpan: document.querySelector(".task-count .value"),
+  finishedCountSpan: document.querySelector(".finished-count .value"),
 }
 
-const completeTask = (taskId) => {
-  const index = tasks.findIndex(({ id }) => id === taskId)
-  const { id, task } = tasks[index]
-  tasks[index] = { ...tasks[index], finished: true }
-  renderTasks()
-  alert(`Se completó la tarea ${id}:\n > ${task}`)
+// Tasks functions
+const Task = {
+  newId: () => tasks.reduce((acc, { id }) => (id > acc ? id : acc), 0) + 1,
+  index: (taskId) => tasks.findIndex(({ id }) => id === taskId),
+  add: () => {
+    tasks.push({ id: Task.newId(), task: DOM.newTask.value, finished: false })
+    DOM.newTask.value = ""
+    renderTasks()
+  },
+  finish: (taskId) => {
+    const index = Task.index(taskId)
+    tasks[index] = { ...tasks[index], finished: true }
+    renderTasks()
+  },
+  delete: (taskId) => {
+    const { id, task } = tasks.splice(Task.index(taskId), 1)[0]
+    renderTasks()
+    alert(`Se borró la tarea ${id}:\n > ${task}`)
+  },
 }
 
-const deleteTask = (taskId) => {
-  const { id, task } = tasks.splice(
-    tasks.findIndex(({ id }) => id === taskId),
-    1
-  )[0]
-  renderTasks()
-  alert(`Se borró la tarea ${id}:\n > ${task}`)
-}
-
-const countTasks = () => {
-  taskCountSpan.innerText = tasks.length
-  finishedCountSpan.innerText = tasks.filter((t) => t.finished).length
-}
+// DOM functions
 
 const actionButtons = [
-  { title: "Completar", className: "check fas fa-thumbs-up", onClick: completeTask },
-  { title: "Eliminar", className: "del fas fa-trash", onClick: deleteTask },
+  { title: "Completar", className: "check fas fa-thumbs-up", onClick: Task.finish },
+  { title: "Eliminar", className: "del fas fa-trash", onClick: Task.delete },
 ]
 
 const renderTasks = () => {
-  countTasks()
-  taskListDiv.innerHTML = "<div><h4>ID</h4><h4>Tarea</h4></div>"
+  // Update counters
+  DOM.taskCountSpan.innerText = tasks.length
+  DOM.finishedCountSpan.innerText = tasks.filter((t) => t.finished).length
+  // Update tasks list
+  DOM.taskListDiv.innerHTML = "<div><h4>ID</h4><h4>Tarea</h4></div>"
   tasks.forEach(({ id, task, finished }) => {
     const newTask = document.createElement("div")
     newTask.innerHTML = `<p>${id}</p><p class="task-description">${task}</p>`
@@ -63,9 +64,9 @@ const renderTasks = () => {
         newTask.appendChild(button)
       })
     }
-    taskListDiv.appendChild(newTask)
+    DOM.taskListDiv.appendChild(newTask)
   })
 }
 
-newTaskButton.addEventListener("click", addTask)
+DOM.addTaskButton.addEventListener("click", Task.add)
 renderTasks()
