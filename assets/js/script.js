@@ -19,6 +19,7 @@ const DOM = {
 const Task = {
   newId: () => tasks.reduce((acc, { id }) => (id > acc ? id : acc), 0) + 1,
   index: (taskId) => tasks.findIndex(({ id }) => id === taskId),
+  count: (countUnfinished = true) => tasks.filter((t) => countUnfinished || t.finished).length,
   add: () => {
     const task = DOM.newTask.value
     if (!task) {
@@ -50,8 +51,8 @@ const actionButtons = [
 
 const renderTasks = () => {
   // Update counters
-  DOM.taskCountSpan.innerText = tasks.length
-  DOM.finishedCountSpan.innerText = tasks.filter((t) => t.finished).length
+  DOM.taskCountSpan.innerText = Task.count()
+  DOM.finishedCountSpan.innerText = Task.count(false)
   // Update tasks list
   DOM.taskListDiv.innerHTML = "<div><h4>ID</h4><h4>Tarea</h4></div>"
   tasks.forEach(({ id, task, finished }) => {
