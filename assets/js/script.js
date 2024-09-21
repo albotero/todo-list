@@ -17,9 +17,13 @@ const DOM = {
 
 // Tasks functions
 const Task = {
+  // Get next Id for new tasks
   newId: () => tasks.reduce((acc, { id }) => (id > acc ? id : acc), 0) + 1,
+  // Find the index of a task by its Id
   index: (taskId) => tasks.findIndex(({ id }) => id === taskId),
+  // Count all or finished tasks
   count: (countUnfinished = true) => tasks.filter((t) => countUnfinished || t.finished).length,
+  // Add a new task
   add: () => {
     const task = DOM.newTask.value
     if (!task) {
@@ -30,11 +34,13 @@ const Task = {
     DOM.newTask.value = ""
     renderTasks()
   },
-  finish: (taskId) => {
+  // Set a task as completed
+  check: (taskId) => {
     const index = Task.index(taskId)
     tasks[index] = { ...tasks[index], finished: true }
     renderTasks()
   },
+  // Delete a task
   delete: (taskId) => {
     const { id, task } = tasks.splice(Task.index(taskId), 1)[0]
     renderTasks()
@@ -45,7 +51,7 @@ const Task = {
 // DOM functions
 
 const actionButtons = [
-  { title: "Completar", className: "check fas fa-thumbs-up", onClick: Task.finish },
+  { title: "Completar", className: "check fas fa-thumbs-up", onClick: Task.check },
   { title: "Eliminar", className: "del fas fa-trash", onClick: Task.delete },
 ]
 
