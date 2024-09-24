@@ -18,7 +18,7 @@ const DOM = {
 // Tasks functions
 const Task = {
   // Get next Id for new tasks
-  newId: () => tasks.reduce((acc, { id }) => (id > acc ? id : acc), 0) + 1,
+  newId: () => tasks.reduce((acc, { id }) => Math.max(acc, id), 0) + 1,
   // Find the index of a task by its Id
   index: (taskId) => tasks.findIndex(({ id }) => id === taskId),
   // Count all or finished tasks
