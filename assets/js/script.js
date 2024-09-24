@@ -8,7 +8,7 @@ const tasks = [
 
 // DOM Elements to be modified by script
 const DOM = {
-  newTask: document.getElementById("new-task"),
+  newTaskInput: document.getElementById("new-task"),
   addTaskButton: document.getElementById("add-task-button"),
   taskListDiv: document.querySelector(".task-list"),
   taskCountSpan: document.querySelector(".task-count .value"),
@@ -25,13 +25,14 @@ const Task = {
   count: (countUnfinished = true) => tasks.filter((t) => countUnfinished || t.finished).length,
   // Add a new task
   add: () => {
-    const task = DOM.newTask.value
+    const task = DOM.newTaskInput.value
     if (!task) {
       alert("¡ERROR!\nDebe escribir alguna tarea para poder agregarla a la lista")
       return
     }
     tasks.push({ id: Task.newId(), task, finished: false })
-    DOM.newTask.value = ""
+    // Reset input
+    DOM.newTaskInput.value = ""
     renderTasks()
   },
   // Set a task as completed
@@ -42,7 +43,7 @@ const Task = {
   },
   // Delete a task
   delete: (taskId) => {
-    const { id, task } = tasks.splice(Task.index(taskId), 1)[0]
+    const [{ id, task }] = tasks.splice(Task.index(taskId), 1)
     renderTasks()
     alert(`Se borró la tarea #${id}:\n > ${task}`)
   },
@@ -65,14 +66,16 @@ const renderTasks = () => {
     const newTask = document.createElement("div")
     newTask.innerHTML = `<p>${id}</p><p class="task-description">${task}</p>`
     if (finished) {
+      // Add finished icon
       newTask.innerHTML += ` <i class="fas fa-circle-check" title="Completado"></i>`
       newTask.classList.add("finished")
     } else {
+      // Add finish and delete buttons
       actionButtons.forEach(({ title, className, onClick }) => {
         const button = document.createElement("i")
         button.className = className
-        button.addEventListener("click", () => onClick(id))
         button.title = title
+        button.addEventListener("click", () => onClick(id))
         newTask.appendChild(button)
       })
     }
