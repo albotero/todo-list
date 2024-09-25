@@ -27,7 +27,7 @@ const Task = {
   count: (countUnfinished = true) => tasks.filter((t) => countUnfinished || t.finished).length,
   // Add a new task
   add: () => {
-    const task = DOM.newTaskInput.value
+    const task = DOM.newTaskInput.value.trim()
     if (!task) {
       DOM.newTaskInput.focus()
       alert("¡ERROR!\nDebe escribir alguna tarea para poder agregarla a la lista")
@@ -36,18 +36,18 @@ const Task = {
     tasks.push({ id: Task.newId(), task, finished: false })
     // Reset input
     DOM.newTaskInput.value = ""
-    renderTasks()
+    updateDOM()
   },
   // Set a task as completed
   check: (taskId) => {
     const index = Task.index(taskId)
     tasks[index] = { ...tasks[index], finished: true }
-    renderTasks()
+    updateDOM()
   },
   // Delete a task
   delete: (taskId) => {
     const [{ id, task }] = tasks.splice(Task.index(taskId), 1)
-    renderTasks()
+    updateDOM()
     alert(`Se borró la tarea #${id}:\n > ${task}`)
   },
 }
@@ -59,31 +59,33 @@ const actionButtons = [
   { title: "Eliminar", className: "del fas fa-trash", onclick: Task.delete },
 ]
 
-const renderTasks = () => {
+const renderTask = ({ id, task, finished }) => {
+  const newTask = DOM.create("div", { innerHTML: `<p>${id}</p><p class="task-description">${task}</p>` })
+  if (finished) {
+    // Add finished icon
+    DOM.modify(newTask, {
+      className: "finished",
+      innerHTML: `${newTask.innerHTML} <i class="fas fa-circle-check" title="Completado"></i>`,
+    })
+  } else {
+    // Add finish and delete buttons
+    actionButtons.forEach((props) =>
+      newTask.appendChild(DOM.create("i", { ...props, onclick: () => props.onclick(id) }))
+    )
+  }
+  return newTask
+}
+
+const updateDOM = () => {
   // Update counters
   DOM.taskCountSpan.innerText = Task.count()
   DOM.finishedCountSpan.innerText = Task.count(false)
   // Update tasks list
   DOM.taskListDiv.innerHTML = "<div><h4>ID</h4><h4>Tarea</h4></div>"
-  tasks.forEach(({ id, task, finished }) => {
-    const newTask = DOM.create("div", { innerHTML: `<p>${id}</p><p class="task-description">${task}</p>` })
-    if (finished) {
-      // Add finished icon
-      DOM.modify(newTask, {
-        className: "finished",
-        innerHTML: `${newTask.innerHTML} <i class="fas fa-circle-check" title="Completado"></i>`,
-      })
-    } else {
-      // Add finish and delete buttons
-      actionButtons.forEach((props) =>
-        newTask.appendChild(DOM.create("i", { ...props, onclick: () => props.onclick(id) }))
-      )
-    }
-    DOM.taskListDiv.appendChild(newTask)
-  })
+  DOM.taskListDiv.append(...tasks.map(renderTask))
   DOM.newTaskInput.focus()
 }
 
 DOM.addTaskButton.addEventListener("click", Task.add)
 DOM.newTaskInput.addEventListener("keypress", (e) => e.key === "Enter" && Task.add())
-renderTasks()
+document.addEventListener("DOMContentLoaded", updateDOM)
