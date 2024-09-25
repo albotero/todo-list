@@ -29,6 +29,7 @@ const Task = {
   add: () => {
     const task = DOM.newTaskInput.value
     if (!task) {
+      DOM.newTaskInput.focus()
       alert("¡ERROR!\nDebe escribir alguna tarea para poder agregarla a la lista")
       return
     }
@@ -83,4 +84,5 @@ const renderTasks = () => {
 }
 
 DOM.addTaskButton.addEventListener("click", Task.add)
+DOM.newTaskInput.addEventListener("keypress", (e) => e.key === "Enter" && Task.add())
 renderTasks()
