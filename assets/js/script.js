@@ -13,6 +13,8 @@ const DOM = {
   taskListDiv: document.querySelector(".task-list"),
   taskCountSpan: document.querySelector(".task-count .value"),
   finishedCountSpan: document.querySelector(".finished-count .value"),
+  modify: (element, props) => Object.assign(element, props),
+  create: (tag, props) => DOM.modify(document.createElement(tag), props),
 }
 
 // Tasks functions
@@ -52,8 +54,8 @@ const Task = {
 // DOM functions
 
 const actionButtons = [
-  { title: "Completar", className: "check fas fa-thumbs-up", onClick: Task.check },
-  { title: "Eliminar", className: "del fas fa-trash", onClick: Task.delete },
+  { title: "Completar", className: "check fas fa-thumbs-up", onclick: Task.check },
+  { title: "Eliminar", className: "del fas fa-trash", onclick: Task.delete },
 ]
 
 const renderTasks = () => {
@@ -63,21 +65,18 @@ const renderTasks = () => {
   // Update tasks list
   DOM.taskListDiv.innerHTML = "<div><h4>ID</h4><h4>Tarea</h4></div>"
   tasks.forEach(({ id, task, finished }) => {
-    const newTask = document.createElement("div")
-    newTask.innerHTML = `<p>${id}</p><p class="task-description">${task}</p>`
+    const newTask = DOM.create("div", { innerHTML: `<p>${id}</p><p class="task-description">${task}</p>` })
     if (finished) {
       // Add finished icon
-      newTask.innerHTML += ` <i class="fas fa-circle-check" title="Completado"></i>`
-      newTask.classList.add("finished")
+      DOM.modify(newTask, {
+        className: "finished",
+        innerHTML: `${newTask.innerHTML} <i class="fas fa-circle-check" title="Completado"></i>`,
+      })
     } else {
       // Add finish and delete buttons
-      actionButtons.forEach(({ title, className, onClick }) => {
-        const button = document.createElement("i")
-        button.className = className
-        button.title = title
-        button.addEventListener("click", () => onClick(id))
-        newTask.appendChild(button)
-      })
+      actionButtons.forEach((props) =>
+        newTask.appendChild(DOM.create("i", { ...props, onclick: () => props.onclick(id) }))
+      )
     }
     DOM.taskListDiv.appendChild(newTask)
   })
