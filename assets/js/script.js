@@ -81,6 +81,7 @@ const renderTasks = () => {
     }
     DOM.taskListDiv.appendChild(newTask)
   })
+  DOM.newTaskInput.focus()
 }
 
 DOM.addTaskButton.addEventListener("click", Task.add)
