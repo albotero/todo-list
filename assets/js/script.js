@@ -69,11 +69,12 @@ const renderTask = ({ id, task, finished }) => {
     innerHTML: `<p>${id}</p><p class="task-description">${task}</p>`,
   })
   // Add buttons
-  actionButtons
+  const buttonElements = actionButtons
     // Get only required buttons according to completion status
     .slice(...(finished ? [0, 1] : [1]))
-    // Append each button to the task Element
-    .forEach((p) => newTask.appendChild(DOM.create("i", { ...p, onclick: () => p.onclick(id) })))
+    // Create a new Element for the button
+    .map((p) => DOM.create("i", { ...p, onclick: () => p.onclick(id) }))
+  newTask.append(...buttonElements)
   return newTask
 }
 
