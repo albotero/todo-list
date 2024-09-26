@@ -30,21 +30,21 @@ h4 {
 
 .form-tasks {
   display: grid;
-  grid-template-columns: 1fr 1fr min-content;
+  grid-template-columns: repeat(3, 1fr) min-content;
   grid-template-rows: repeat(4, min-content);
   grid-template-areas:
-    "new-title . ."
-    "new-task new-task new-button"
-    ". tasks tasks"
-    "summary-total tasks tasks"
-    "summary-done tasks tasks"
-    ". tasks tasks";
+    "new-title . . ."
+    "new-task new-task new-task new-button"
+    ". tasks tasks tasks"
+    "summary-total tasks tasks tasks"
+    "summary-done tasks tasks tasks"
+    ". tasks tasks tasks";
   gap: 0.2rem 0.5rem;
 }
 
 .new-title {
   grid-area: new-title;
-  margin: 0;
+  margin: 0.1rem 0.5rem;
 }
 
 #new-task,
@@ -85,7 +85,7 @@ span.value {
   grid-area: tasks;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.4rem 0.2rem;
 }
 
 .task-list h4 {
@@ -97,18 +97,24 @@ span.value {
   grid-template-columns: 2.2rem 1fr repeat(2, min-content);
   grid-template-rows: min-content;
   gap: 0 0.6rem;
-  padding: 0.1rem 0.6rem;
   align-items: center;
   border-radius: 0.6rem;
+  padding-left: 0.6rem;
 }
 
 .task-list > div :first-child {
   text-align: center;
 }
 
+.task-list > div:not(:first-child) {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  padding: 0.6rem;
+}
+
 .task-list > div:not(:first-child):hover {
   background-color: #c0b6a4;
 }
+
 .task-list > div.finished:hover {
   background-color: #96bb98;
 }
@@ -127,7 +133,7 @@ span.value {
 
 .finished {
   color: #192d24;
-  background-color: #a3ddb9;
+  background-color: #90dd96;
 }
 
 .check,
