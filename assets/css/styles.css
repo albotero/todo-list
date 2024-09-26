@@ -20,7 +20,7 @@ h4 {
 }
 
 .title,
-.container p {
+.form-tasks p {
   margin: 0;
 }
 
@@ -28,7 +28,7 @@ h4 {
   width: 100%;
 }
 
-.container {
+.form-tasks {
   display: grid;
   grid-template-columns: 1fr 1fr min-content;
   grid-template-rows: repeat(4, min-content);
@@ -110,8 +110,11 @@ span.value {
   background-color: #e3cda8;
 }
 
-.task-list div:not(.finished) i {
+.task-list i {
   cursor: pointer;
+}
+
+.task-list div:not(.finished) i {
   filter: contrast(20%) brightness(105%);
 }
 
@@ -120,7 +123,8 @@ span.value {
 }
 
 .finished {
-  color: #41594e;
+  color: #192d24;
+  background-color: #a3ddb9;
 }
 
 .check,

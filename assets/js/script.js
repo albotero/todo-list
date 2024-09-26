@@ -6,44 +6,46 @@ const tasks = [
   { id: 4, task: "Organizar el cumpleaños de Pedro", finished: false },
 ]
 
-// DOM Elements to be modified by script
+// DOM Elements to be used by script
 const DOM = {
   newTaskInput: document.getElementById("new-task"),
-  addTaskButton: document.getElementById("add-task-button"),
+  formTasks: document.querySelector(".form-tasks"),
   taskListDiv: document.querySelector(".task-list"),
   taskCountSpan: document.querySelector(".task-count .value"),
   finishedCountSpan: document.querySelector(".finished-count .value"),
-  modify: (element, props) => Object.assign(element, props),
-  create: (tag, props) => DOM.modify(document.createElement(tag), props),
+  create: (tag, props) => Object.assign(document.createElement(tag), props),
 }
 
 // Tasks functions
 const Task = {
   // Get next Id for new tasks
   newId: () => tasks.reduce((acc, { id }) => Math.max(acc, id), 0) + 1,
+
   // Find the index of a task by its Id
   index: (taskId) => tasks.findIndex(({ id }) => id === taskId),
+
   // Count all or finished tasks
   count: (countUnfinished = true) => tasks.filter((t) => countUnfinished || t.finished).length,
+
   // Add a new task
-  add: () => {
-    const task = DOM.newTaskInput.value.trim()
-    if (!task) {
-      DOM.newTaskInput.focus()
-      alert("¡ERROR!\nDebe escribir alguna tarea para poder agregarla a la lista")
-      return
-    }
-    tasks.push({ id: Task.newId(), task, finished: false })
-    // Reset input
-    DOM.newTaskInput.value = ""
+  add: (e) => {
+    e.preventDefault()
+    tasks.push({
+      id: Task.newId(),
+      task: new FormData(e.target).get("new-task").trim(),
+      finished: false,
+    })
+    e.target.reset()
     updateDOM()
   },
-  // Set a task as completed
+
+  // Change finished status
   check: (taskId) => {
     const index = Task.index(taskId)
-    tasks[index] = { ...tasks[index], finished: true }
+    tasks[index].finished = !tasks[index].finished
     updateDOM()
   },
+
   // Delete a task
   delete: (taskId) => {
     const [{ id, task }] = tasks.splice(Task.index(taskId), 1)
@@ -55,24 +57,23 @@ const Task = {
 // DOM functions
 
 const actionButtons = [
+  { title: "Completado", className: "check fas fa-circle-check", onclick: Task.check },
   { title: "Completar", className: "check fas fa-thumbs-up", onclick: Task.check },
   { title: "Eliminar", className: "del fas fa-trash", onclick: Task.delete },
 ]
 
 const renderTask = ({ id, task, finished }) => {
-  const newTask = DOM.create("div", { innerHTML: `<p>${id}</p><p class="task-description">${task}</p>` })
-  if (finished) {
-    // Add finished icon
-    DOM.modify(newTask, {
-      className: "finished",
-      innerHTML: `${newTask.innerHTML} <i class="fas fa-circle-check" title="Completado"></i>`,
-    })
-  } else {
-    // Add finish and delete buttons
-    actionButtons.forEach((props) =>
-      newTask.appendChild(DOM.create("i", { ...props, onclick: () => props.onclick(id) }))
-    )
-  }
+  // Create new DOM Element
+  const newTask = DOM.create("div", {
+    className: finished ? "finished" : "",
+    innerHTML: `<p>${id}</p><p class="task-description">${task}</p>`,
+  })
+  // Add buttons
+  actionButtons
+    // Get only required buttons according to completion status
+    .slice(...(finished ? [0, 1] : [1]))
+    // Append each button to the task Element
+    .forEach((p) => newTask.appendChild(DOM.create("i", { ...p, onclick: () => p.onclick(id) })))
   return newTask
 }
 
@@ -86,6 +87,5 @@ const updateDOM = () => {
   DOM.newTaskInput.focus()
 }
 
-DOM.addTaskButton.addEventListener("click", Task.add)
-DOM.newTaskInput.addEventListener("keypress", (e) => e.key === "Enter" && Task.add())
+DOM.formTasks.addEventListener("submit", Task.add)
 document.addEventListener("DOMContentLoaded", updateDOM)
