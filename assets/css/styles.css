@@ -107,7 +107,10 @@ span.value {
 }
 
 .task-list > div:not(:first-child):hover {
-  background-color: #e3cda8;
+  background-color: #c0b6a4;
+}
+.task-list > div.finished:hover {
+  background-color: #96bb98;
 }
 
 .task-list i {
