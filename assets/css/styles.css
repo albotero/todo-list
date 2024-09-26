@@ -123,11 +123,13 @@ span.value {
   cursor: pointer;
 }
 
-.task-list div:not(.finished) i {
+.task-list div:not(.finished) i,
+.task-list .finished:hover i {
   filter: contrast(20%) brightness(105%);
 }
 
-.task-list div:not(.finished) i:hover {
+.task-list div:not(.finished) i:hover,
+.task-list .finished i:hover {
   filter: none;
 }
 
@@ -136,9 +138,8 @@ span.value {
   background-color: #90dd96;
 }
 
-.check,
-.finished i {
-  color: rgb(2, 126, 2);
+.check {
+  color: rgb(5, 119, 5);
 }
 
 .del {
