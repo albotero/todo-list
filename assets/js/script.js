@@ -21,8 +21,8 @@ const Task = {
   // Get next Id for new tasks
   newId: () => tasks.reduce((acc, { id }) => Math.max(acc, id), 0) + 1,
 
-  // Find the index of a task by its Id
-  index: (taskId) => tasks.findIndex(({ id }) => id === taskId),
+  // Find the index of a task by its parent's data-task-id attribute
+  index: (e) => tasks.findIndex(({ id }) => id == e.target.parentElement.dataset.taskId),
 
   // Count all or finished tasks
   count: (countUnfinished = true) => tasks.filter((t) => countUnfinished || t.finished).length,
@@ -40,15 +40,15 @@ const Task = {
   },
 
   // Change finished status
-  check: (taskId) => {
-    const index = Task.index(taskId)
+  check: (e) => {
+    const index = Task.index(e)
     tasks[index].finished = !tasks[index].finished
     updateDOM()
   },
 
   // Delete a task
-  delete: (taskId) => {
-    const [{ id, task }] = tasks.splice(Task.index(taskId), 1)
+  delete: (e) => {
+    const [{ id, task }] = tasks.splice(Task.index(e), 1)
     updateDOM()
     alert(`Se borró la tarea #${id}:\n > ${task}`)
   },
@@ -68,12 +68,14 @@ const renderTask = ({ id, task, finished }) => {
     className: finished ? "finished" : "",
     innerHTML: `<p>${id}</p><p class="task-description">${task}</p>`,
   })
+  // Add data-task-id attribute
+  newTask.dataset.taskId = id
   // Add buttons
   const buttonElements = actionButtons
     // Get only required buttons according to completion status
     .slice(...(finished ? [0, 1] : [1]))
     // Create a new Element for the button
-    .map((p) => DOM.create("i", { ...p, onclick: () => p.onclick(id) }))
+    .map((props) => DOM.create("i", props))
   newTask.append(...buttonElements)
   return newTask
 }
