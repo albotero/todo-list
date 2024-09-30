@@ -86,8 +86,8 @@ const updateDOM = () => {
   DOM.taskCountSpan.innerText = Task.count()
   DOM.finishedCountSpan.innerText = Task.count(false)
   // Update tasks list
-  DOM.taskListDiv.innerHTML = "<div><h4>ID</h4><h4>Tarea</h4></div>"
-  DOM.taskListDiv.append(...tasks.map(renderTask))
+  const title = DOM.create("div", { innerHTML: "<h4>ID</h4><h4>Tarea</h4>" })
+  DOM.taskListDiv.replaceChildren(title, ...tasks.map(renderTask))
   DOM.newTaskInput.focus()
 }
 
