@@ -62,23 +62,22 @@ const actionButtons = [
   { title: "Eliminar", className: "del fas fa-trash", onclick: Task.delete },
 ]
 
-const renderTaskDetails = ({ id, task }) => [
-  DOM.create("p", { textContent: id }),
-  DOM.create("p", { className: "task-description", textContent: task }),
-]
-
 const renderTask = ({ id, task, finished }) => {
   // Create new DOM Element
   const newTask = DOM.create("div", { className: finished ? "finished" : "" })
   newTask.dataset.taskId = id
   // Add children
-  const taskDetails = renderTaskDetails({ id, task })
-  const buttonElements = actionButtons
-    // Get only required buttons according to completion status
-    .slice(...(finished ? [0, 1] : [1]))
-    // Create a new Element for the button
-    .map((props) => DOM.create("i", props))
-  newTask.append(...taskDetails, ...buttonElements)
+  const children = [
+    DOM.create("p", { textContent: id }),
+    DOM.create("p", { className: "task-description", textContent: task }),
+  ].concat(
+    actionButtons
+      // Get only required buttons according to completion status
+      .slice(...(finished ? [0, 1] : [1]))
+      // Create a new Element for the button
+      .map((props) => DOM.create("i", props))
+  )
+  newTask.append(...children)
   return newTask
 }
 
